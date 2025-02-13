@@ -7,22 +7,28 @@
 # you're doing.
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp-education/ubuntu-24-04"
-  config.vm.define "control-plane" do |plane|
-    plane.vm.hostname = "control-plane"
-    plane.vm.network "private_network", ip: "192.168.56.4"
-    plane.vm.provider "virtualbox" do |vb|
-      vb.memory = "2048"
-      vb.cpus = 2
-    end
+
+  config.vm.provision "shell", run: "always", inline: "swapoff -a; sudo sysctl -w net.ipv4.ip_forward=1;"
+
+  config.vm.provider "virtualbox" do |v|
+    v.gui = false
   end
 
-  (1..2).each do |i|
-    config.vm.define "worker-#{i}" do |plane|
-      plane.vm.hostname = "worker"
-      plane.vm.network "private_network", ip: "192.168.56.#{5+i}"
+  (0..2).each do |i|
+    if i == 0
+      vm_name = "control-plane"
+    else
+      vm_name = "worker-#{i}"
+    end
+    config.vm.define vm_name do |plane|
+      plane.vm.hostname = vm_name 
+      plane.vm.network "private_network", ip: "192.168.56.#{5+i}", virtualbox__intnet: true
       plane.vm.provider "virtualbox" do |vb|
         vb.memory = "2048"
         vb.cpus = 2
+        vb.customize ["modifyvm", :id, "--uartmode1", File::NULL]
+        # vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
+        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
       end
     end
   end

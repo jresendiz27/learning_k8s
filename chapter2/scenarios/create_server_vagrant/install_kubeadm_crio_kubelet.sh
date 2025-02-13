@@ -14,3 +14,7 @@ sudo apt install -y cri-o kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 
 sudo systemctl start crio.service 
+
+sudo modprobe br_netfilter
+
+sudo systemctl enable --now kubelet
