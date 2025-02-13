@@ -1,0 +1,115 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-space
+
+---
+#Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-wear-watch
+  namespace: app-space
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: myapp.local  # Add this line to specify the host
+    http:
+      paths:
+      - path: /wear
+        pathType: Prefix
+        backend:
+          service:
+            name: wear-service
+            port:
+              number: 8080
+      - path: /watch
+        pathType: Prefix
+        backend:
+          service:
+            name: watch-service
+            port:
+              number: 8080
+
+
+---
+#Deployment
+---
+#Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: watch-deployment
+  namespace: app-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: watch
+  template:
+    metadata:
+      labels:
+        app: watch
+    spec:
+      containers:
+      - name: watch
+        image: kodekloud/ecommerce:video
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wear-deployment
+  namespace: app-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wear
+  template:
+    metadata:
+      labels:
+        app: wear
+    spec:
+      containers:
+      - name: wear
+        image: kodekloud/ecommerce:apparels
+        ports:
+        - containerPort: 8080
+
+---
+#Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: watch-service
+  namespace: app-space
+spec:
+  selector:
+    app: watch
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wear-service
+  namespace: app-space
+spec:
+  selector:
+    app: wear
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP

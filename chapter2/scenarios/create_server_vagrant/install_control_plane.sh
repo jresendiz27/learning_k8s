@@ -1,7 +1,7 @@
 # install kubernetes control-plane
 # Control plane
 if [[ $HOSTNAME = "control-plane"]]; then
-    sudo kubeadm init --pod-network-cidr=192.168.56.0/24 --apiserver-advertise-address=192.168.56.4 --cri-socket=/var/run/crio/crio.sock
+    sudo kubeadm init --pod-network-cidr=172.16.1.0/16 --apiserver-advertise-address=$CONTROL_PLANE_IP --cri-socket=/var/run/crio/crio.sock
 
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
