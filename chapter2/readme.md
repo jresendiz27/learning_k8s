@@ -29,9 +29,11 @@ RBAC consists of three building blocks that connect to the privitive apis
 
 RBAC (**Role-Based Access Control**) in Kubernetes is built upon **four key API primitives**:
 
-| **RBAC Object**         | **Scope**   | **Purpose**                                           |
-|-------------------------|------------|------------------------------------------------------|
-| **Role**               | Namespace   | Defines permissions within a namespace.             |
-| **ClusterRole**        | Cluster     | Defines cluster-wide permissions.                   |
-| **RoleBinding**        | Namespace   | Assigns a **Role** to a user, group, or service account. |
-| **ClusterRoleBinding** | Cluster     | Assigns a **ClusterRole** to a user, group, or service account. |
+| **RBAC Object**        | **Scope** | **Purpose**                                                     |
+| ---------------------- | --------- | --------------------------------------------------------------- |
+| **Role**               | Namespace | Defines permissions within a namespace.                         |
+| **ClusterRole**        | Cluster   | Defines cluster-wide permissions.                               |
+| **RoleBinding**        | Namespace | Assigns a **Role** to a user, group, or service account.        |
+| **ClusterRoleBinding** | Cluster   | Assigns a **ClusterRole** to a user, group, or service account. |
+
+
