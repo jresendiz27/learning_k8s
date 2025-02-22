@@ -7,8 +7,9 @@ curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/Release.
 sudo echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/cri-o.list
 
 sudo apt update
-sudo apt-cache madison kubeadm
-sudo apt-mark unhold kubeadm && sudo apt-get update && sudo apt-get install -y kubeadm=<VERSION_FROM_APT_CACHE_MADISON> && sudo apt-mark hold kubeadm
+sudo apt-cache madison kubeadm # sudo apt-cache policy kubeadm
+sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm=<VERSION_FROM_APT_CACHE_MADISON> && sudo apt-mark hold kubeadm
+# control-plane
 sudo kubeadm upgrade plan
 sudo kubeadm upgrade apply v1.31.6
 kubectl drain $HOSTNAME --ignore-daemonsets

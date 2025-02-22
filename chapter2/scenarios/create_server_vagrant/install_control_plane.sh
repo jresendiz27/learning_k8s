@@ -11,5 +11,5 @@ if [[ $HOSTNAME = "control-plane"]]; then
 else
     echo "Insert the kubeadmn join command from the control-plane!!"
     # worker 
-    sudo kubeadm join 192.168.56.4:6443 --token <TOKEN> --discovery-token-ca-cert-hash sha256:<HASH> --cri-socket=/var/run/crio/crio.sock
+    sudo kubeadm join $CONTROL_PLANE_IP --token <TOKEN> --discovery-token-ca-cert-hash sha256:<HASH> --cri-socket=/var/run/crio/crio.sock
 fi
